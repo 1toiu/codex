@@ -36,7 +36,12 @@
                     <button class="btn" type="submit">查询用户</button>
                     <a class="btn secondary" href="list">重置</a>
                 </form>
-                <c:if test="${sessionScope.role == 'admin'}"><a class="btn warning" href="${pageContext.request.contextPath}/add">添加用户</a></c:if>
+                <div class="actions">
+                    <a class="btn secondary" href="${pageContext.request.contextPath}/export?name=${param.name}">导出文件</a>
+                    <c:if test="${sessionScope.role == 'admin'}">
+                        <a class="btn warning" href="${pageContext.request.contextPath}/add">添加用户</a>
+                    </c:if>
+                </div>
             </div>
 
             <div class="table-wrap">
