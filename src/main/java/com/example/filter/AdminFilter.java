@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/add", "/edit", "/update", "/delete", "/add.jsp", "/edit.jsp"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {"/add", "/edit", "/update", "/delete", "/import", "/add.jsp", "/edit.jsp"})
 public class AdminFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -31,7 +31,7 @@ public class AdminFilter implements Filter {
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("flash", "普通用户只能查看列表，不能新增、编辑或删除。");
+        session.setAttribute("flash", "普通用户只能查看列表，不能新增、编辑、删除或导入。");
         response.sendRedirect(request.getContextPath() + "/list");
     }
 }

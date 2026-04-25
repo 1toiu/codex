@@ -39,6 +39,9 @@
                 <div class="actions">
                     <a class="btn secondary" href="${pageContext.request.contextPath}/export?name=${param.name}">导出文件</a>
                     <c:if test="${sessionScope.role == 'admin'}">
+                        <form class="import-form" id="importForm" action="${pageContext.request.contextPath}/import" method="post" enctype="multipart/form-data">
+                            <button class="btn secondary" id="importTrigger" type="button">导入文件</button>
+                        </form>
                         <a class="btn warning" href="${pageContext.request.contextPath}/add">添加用户</a>
                     </c:if>
                 </div>
@@ -73,5 +76,35 @@
             </div>
         </section>
     </main>
+    <script>
+        (function () {
+            var importForm = document.getElementById('importForm');
+            var importTrigger = document.getElementById('importTrigger');
+            if (!importForm || !importTrigger) {
+                return;
+            }
+
+            importTrigger.addEventListener('click', function () {
+                var oldInput = importForm.querySelector('input[type="file"]');
+                if (oldInput) {
+                    importForm.removeChild(oldInput);
+                }
+
+                var fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.name = 'file';
+                fileInput.accept = '.csv,text/csv';
+                fileInput.required = true;
+                fileInput.className = 'import-input';
+                fileInput.addEventListener('change', function () {
+                    if (fileInput.files && fileInput.files.length > 0) {
+                        importForm.appendChild(fileInput);
+                        importForm.submit();
+                    }
+                });
+                fileInput.click();
+            });
+        })();
+    </script>
 </body>
 </html>
