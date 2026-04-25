@@ -65,6 +65,8 @@ body::before {
 .id-pill, .badge, .readonly-pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 7px 12px; font-size: 13px; font-weight: 900; }
 .id-pill { min-width: 42px; justify-content: center; color: var(--brand-deep); background: rgba(20,184,166,0.12); }
 .actions { display: flex; gap: 10px; }
+.import-form { display: flex; align-items: center; gap: 10px; }
+.import-input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .link-action { border-radius: 999px; padding: 7px 12px; color: var(--brand-deep); background: rgba(15,118,110,0.09); font-weight: 800; text-decoration: none; }
 .link-action.danger { color: var(--danger); background: rgba(220,38,38,0.09); }
 .empty { padding: 38px 20px; color: var(--muted); text-align: center; }
@@ -84,7 +86,7 @@ body::before {
 
 @media (max-width: 680px) {
     .shell { width: min(100% - 22px, 1120px); padding-top: 26px; }
-    .toolbar, .search-form, .form-actions, .topbar { display: grid; grid-template-columns: 1fr; }
+    .toolbar, .search-form, .form-actions, .topbar, .import-form { display: grid; grid-template-columns: 1fr; }
     .form-card { padding: 22px; }
     .user-table th, .user-table td { padding: 14px 16px; }
     .topbar { align-items: stretch; border-radius: 22px; }
