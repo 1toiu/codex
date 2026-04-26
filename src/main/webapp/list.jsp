@@ -21,7 +21,7 @@
         <section class="hero">
             <span class="eyebrow">USER DIRECTORY</span>
             <h1>用户管理系统</h1>
-            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除用户；普通用户只拥有查看权限。</p>
+            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只拥有查看权限。</p>
         </section>
 
         <c:if test="${not empty sessionScope.flash}">
@@ -39,8 +39,12 @@
                 <div class="actions">
                     <a class="btn secondary" href="${pageContext.request.contextPath}/export?name=${param.name}">导出文件</a>
                     <c:if test="${sessionScope.role == 'admin'}">
+                        <a class="btn secondary" href="${pageContext.request.contextPath}/backup">备份数据</a>
                         <form class="import-form" id="importForm" action="${pageContext.request.contextPath}/import" method="post" enctype="multipart/form-data">
                             <button class="btn secondary" id="importTrigger" type="button">导入文件</button>
+                        </form>
+                        <form class="import-form" id="restoreForm" action="${pageContext.request.contextPath}/restore" method="post" enctype="multipart/form-data">
+                            <button class="btn secondary" id="restoreTrigger" type="button">恢复数据</button>
                         </form>
                         <a class="btn warning" href="${pageContext.request.contextPath}/add">添加用户</a>
                     </c:if>
@@ -78,32 +82,43 @@
     </main>
     <script>
         (function () {
-            var importForm = document.getElementById('importForm');
-            var importTrigger = document.getElementById('importTrigger');
-            if (!importForm || !importTrigger) {
-                return;
-            }
-
-            importTrigger.addEventListener('click', function () {
-                var oldInput = importForm.querySelector('input[type="file"]');
-                if (oldInput) {
-                    importForm.removeChild(oldInput);
+            function bindUploadTrigger(formId, triggerId, needConfirm) {
+                var form = document.getElementById(formId);
+                var trigger = document.getElementById(triggerId);
+                if (!form || !trigger) {
+                    return;
                 }
 
-                var fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.name = 'file';
-                fileInput.accept = '.csv,text/csv';
-                fileInput.required = true;
-                fileInput.className = 'import-input';
-                fileInput.addEventListener('change', function () {
-                    if (fileInput.files && fileInput.files.length > 0) {
-                        importForm.appendChild(fileInput);
-                        importForm.submit();
+                trigger.addEventListener('click', function () {
+                    var oldInput = form.querySelector('input[type="file"]');
+                    if (oldInput) {
+                        form.removeChild(oldInput);
                     }
+
+                    var fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.name = 'file';
+                    fileInput.accept = '.csv,text/csv';
+                    fileInput.required = true;
+                    fileInput.className = 'import-input';
+                    fileInput.addEventListener('change', function () {
+                        if (!fileInput.files || fileInput.files.length === 0) {
+                            return;
+                        }
+
+                        if (needConfirm && !window.confirm('恢复会先清空当前所有用户数据，再按所选文件重新恢复。确定继续吗？')) {
+                            return;
+                        }
+
+                        form.appendChild(fileInput);
+                        form.submit();
+                    });
+                    fileInput.click();
                 });
-                fileInput.click();
-            });
+            }
+
+            bindUploadTrigger('importForm', 'importTrigger', false);
+            bindUploadTrigger('restoreForm', 'restoreTrigger', true);
         })();
     </script>
 </body>
