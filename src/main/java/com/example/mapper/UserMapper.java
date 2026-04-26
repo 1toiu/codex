@@ -17,11 +17,17 @@ public interface UserMapper {
     @Insert("INSERT INTO t_user(name, age, email) VALUES(#{name}, #{age}, #{email})")
     int add(User user);
 
+    @Insert("INSERT INTO t_user(id, name, age, email) VALUES(#{id}, #{name}, #{age}, #{email})")
+    int addWithId(User user);
+
     @Update("UPDATE t_user SET name=#{name}, age=#{age}, email=#{email} WHERE id=#{id}")
     int update(User user);
 
     @Delete("DELETE FROM t_user WHERE id=#{id}")
     int deleteById(Integer id);
+
+    @Delete("DELETE FROM t_user")
+    int deleteAll();
 
     @Select("SELECT * FROM t_user WHERE name LIKE CONCAT('%',#{name},'%')")
     List<User> findByName(String name);
