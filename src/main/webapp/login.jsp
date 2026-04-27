@@ -17,9 +17,13 @@
 
         <section class="panel form-card login-card">
             <form class="form-grid" action="login" method="post">
+                <% if (session.getAttribute("flash") != null) { %>
+                    <div class="alert"><%= session.getAttribute("flash") %></div>
+                    <% session.removeAttribute("flash"); %>
+                <% } %>
                 <div class="field">
                     <label for="username">账号</label>
-                    <input class="input" id="username" type="text" name="username" placeholder="admin 或 user" required autofocus>
+                    <input class="input" id="username" type="text" name="username" value="${param.username}" placeholder="请输入账号" required autofocus>
                 </div>
                 <div class="field">
                     <label for="password">密码</label>
@@ -29,7 +33,7 @@
                     <div class="alert danger"><%= request.getAttribute("error") %></div>
                 <% } %>
                 <button class="btn" type="submit">登录系统</button>
-                <div class="role-note"><strong>演示账号：</strong>管理员 admin / admin123，普通用户 user / user123</div>
+                <div class="role-note"><strong>数据库默认账号：</strong>管理员 admin / admin123，普通用户 user / user123</div>
             </form>
         </section>
     </main>

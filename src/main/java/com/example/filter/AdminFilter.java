@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/add", "/edit", "/update", "/delete", "/import", "/backup", "/restore", "/add.jsp", "/edit.jsp"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {"/add", "/edit", "/update", "/delete", "/import", "/backup", "/restore", "/logs", "/logs.jsp", "/add.jsp", "/edit.jsp"})
 public class AdminFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)

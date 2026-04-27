@@ -15,13 +15,42 @@
                 <span class="badge ${sessionScope.role == 'admin' ? 'admin' : 'user'}">${sessionScope.role == 'admin' ? '管理员' : '普通用户'}</span>
                 <span class="welcome">当前登录：${sessionScope.loginUser}</span>
             </div>
-            <a class="btn secondary compact" href="${pageContext.request.contextPath}/logout">退出登录</a>
+            <div class="actions">
+                <c:if test="${sessionScope.role == 'admin'}">
+                    <a class="btn secondary compact" href="${pageContext.request.contextPath}/logs">操作日志</a>
+                </c:if>
+                <a class="btn secondary compact" href="${pageContext.request.contextPath}/change-password">修改密码</a>
+                <a class="btn secondary compact" href="${pageContext.request.contextPath}/logout">退出登录</a>
+            </div>
         </div>
 
         <section class="hero">
             <span class="eyebrow">USER DIRECTORY</span>
             <h1>用户管理系统</h1>
-            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只拥有查看权限。</p>
+            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只有查看权限。</p>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span class="stat-label">用户总数</span>
+                <strong class="stat-value">${totalUserCount}</strong>
+                <span class="stat-meta">系统中的全部用户资料</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">当前结果</span>
+                <strong class="stat-value">${totalCount}</strong>
+                <span class="stat-meta">本次查询命中的记录数</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">系统账号</span>
+                <strong class="stat-value">${accountCount}</strong>
+                <span class="stat-meta">可登录后台的账号数量</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">操作日志</span>
+                <strong class="stat-value">${logCount}</strong>
+                <span class="stat-meta">累计记录的关键操作</span>
+            </article>
         </section>
 
         <c:if test="${not empty sessionScope.flash}">
@@ -53,7 +82,15 @@
 
             <div class="table-wrap">
                 <table class="user-table">
-                    <thead><tr><th>ID</th><th>姓名</th><th>年龄</th><th>邮箱</th><th>操作</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>年龄</th>
+                            <th>邮箱</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <c:forEach var="user" items="${userList}">
                             <tr>
@@ -69,21 +106,25 @@
                                                 <a class="link-action danger" href="${pageContext.request.contextPath}/delete?id=${user.id}" onclick="return confirm('确定要删除这个用户吗？')">删除</a>
                                             </div>
                                         </c:when>
-                                        <c:otherwise><span class="readonly-pill">仅可查看</span></c:otherwise>
+                                        <c:otherwise>
+                                            <span class="readonly-pill">仅可查看</span>
+                                        </c:otherwise>
                                     </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                <c:if test="${empty userList}"><div class="empty">暂无匹配的用户，换个关键词试试。</div></c:if>
+                <c:if test="${empty userList}">
+                    <div class="empty">暂无匹配的用户，换个关键词试试。</div>
+                </c:if>
             </div>
 
             <c:if test="${totalPages > 1}">
                 <div class="pagination">
                     <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=1&name=${param.name}">首页</a>
                     <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage - 1}&name=${param.name}">上一页</a>
-                    <span class="page-status">第 ${currentPage} / ${totalPages} 页，共 ${totalCount} 条</span>
+                    <span class="page-status">第 ${currentPage} / ${totalPages} 页，每页 ${pageSize} 条，共 ${totalCount} 条</span>
                     <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage + 1}&name=${param.name}">下一页</a>
                     <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${totalPages}&name=${param.name}">末页</a>
                 </div>

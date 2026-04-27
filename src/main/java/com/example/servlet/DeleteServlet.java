@@ -2,6 +2,7 @@ package com.example.servlet;
 
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,7 @@ public class DeleteServlet extends HttpServlet {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             mapper.deleteById(id);
         }
+        OperationLogUtil.log(request, "DELETE_USER", "删除用户 ID=" + id);
         response.sendRedirect("list");
     }
 }

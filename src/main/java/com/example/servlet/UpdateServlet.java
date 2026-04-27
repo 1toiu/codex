@@ -3,6 +3,7 @@ package com.example.servlet;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,7 @@ public class UpdateServlet extends HttpServlet {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             mapper.update(user);
         }
+        OperationLogUtil.log(request, "UPDATE_USER", "更新用户 ID=" + id + "，姓名=" + name);
         response.sendRedirect("list");
     }
 }
