@@ -41,7 +41,7 @@ public class ExportServlet extends HttpServlet {
 
         StringBuilder csv = new StringBuilder();
         csv.append('\uFEFF');
-        csv.append("ID,姓名,年龄,邮箱\r\n");
+        csv.append("ID,\u59d3\u540d,\u5e74\u9f84,\u90ae\u7bb1\r\n");
 
         for (User user : userList) {
             csv.append(safe(user.getId()))
