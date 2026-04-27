@@ -78,6 +78,16 @@
                 </table>
                 <c:if test="${empty userList}"><div class="empty">暂无匹配的用户，换个关键词试试。</div></c:if>
             </div>
+
+            <c:if test="${totalPages > 1}">
+                <div class="pagination">
+                    <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=1&name=${param.name}">首页</a>
+                    <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage - 1}&name=${param.name}">上一页</a>
+                    <span class="page-status">第 ${currentPage} / ${totalPages} 页，共 ${totalCount} 条</span>
+                    <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage + 1}&name=${param.name}">下一页</a>
+                    <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${totalPages}&name=${param.name}">末页</a>
+                </div>
+            </c:if>
         </section>
     </main>
     <script>

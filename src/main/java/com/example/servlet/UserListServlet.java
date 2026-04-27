@@ -17,6 +17,7 @@ import org.apache.ibatis.session.SqlSession;
 @WebServlet(value = "/list")
 public class UserListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final int PAGE_SIZE = 10;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,9 +27,35 @@ public class UserListServlet extends HttpServlet {
         try (SqlSession sqlSession = MyBatisUtil.getSqlSession()) {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             String name = request.getParameter("name");
-            List<User> userList = name == null || name.trim().isEmpty() ? mapper.findAll() : mapper.findByName(name);
+            String keyword = name == null ? "" : name.trim();
+            boolean hasKeyword = !keyword.isEmpty();
+            int totalCount = hasKeyword ? mapper.countByName(keyword) : mapper.countAll();
+            int totalPages = Math.max(1, (int) Math.ceil(totalCount / (double) PAGE_SIZE));
+            int currentPage = resolvePage(request.getParameter("page"), totalPages);
+            int offset = (currentPage - 1) * PAGE_SIZE;
+            List<User> userList = hasKeyword
+                    ? mapper.findByNamePage(keyword, offset, PAGE_SIZE)
+                    : mapper.findPage(offset, PAGE_SIZE);
             request.setAttribute("userList", userList);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalCount", totalCount);
             request.getRequestDispatcher("/list.jsp").forward((ServletRequest) request, (ServletResponse) response);
+        }
+    }
+
+    private int resolvePage(String pageText, int totalPages) {
+        if (pageText == null || pageText.trim().isEmpty()) {
+            return 1;
+        }
+        try {
+            int page = Integer.parseInt(pageText.trim());
+            if (page < 1) {
+                return 1;
+            }
+            return Math.min(page, totalPages);
+        } catch (NumberFormatException e) {
+            return 1;
         }
     }
 }
