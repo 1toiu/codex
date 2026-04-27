@@ -4,6 +4,7 @@ import com.example.auth.AuthUtil;
 import com.example.entity.AuthAccount;
 import com.example.mapper.AuthAccountMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -72,6 +73,7 @@ public class ChangePasswordServlet extends HttpServlet {
 
         HttpSession newSession = request.getSession(true);
         newSession.setAttribute("flash", "密码修改成功，请使用新密码重新登录。");
+        OperationLogUtil.log(username, "CHANGE_PASSWORD", "修改登录密码");
         response.sendRedirect(request.getContextPath() + "/login");
     }
 

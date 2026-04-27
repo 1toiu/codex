@@ -3,6 +3,7 @@ package com.example.servlet;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +36,7 @@ public class RestoreServlet extends HttpServlet {
 
         if (filePart == null || filePart.getSize() == 0) {
             session.setAttribute("flash", "恢复失败：请选择要恢复的 CSV 文件。");
+            OperationLogUtil.log(request, "RESTORE_USERS", "恢复失败：未选择 CSV 文件");
             response.sendRedirect(request.getContextPath() + "/list");
             return;
         }
@@ -44,6 +46,7 @@ public class RestoreServlet extends HttpServlet {
             payload = parseRestoreFile(inputStream);
         } catch (IllegalArgumentException e) {
             session.setAttribute("flash", "恢复失败：" + e.getMessage());
+            OperationLogUtil.log(request, "RESTORE_USERS", "恢复失败：" + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/list");
             return;
         }
@@ -66,6 +69,7 @@ public class RestoreServlet extends HttpServlet {
         } catch (RuntimeException e) {
             sqlSession.rollback();
             session.setAttribute("flash", "恢复失败：写入数据库时发生异常。");
+            OperationLogUtil.log(request, "RESTORE_USERS", "恢复失败：写入数据库时发生异常");
             response.sendRedirect(request.getContextPath() + "/list");
             return;
         } finally {
@@ -73,6 +77,8 @@ public class RestoreServlet extends HttpServlet {
         }
 
         session.setAttribute("flash", buildFlashMessage(payload));
+        OperationLogUtil.log(request, "RESTORE_USERS",
+                "恢复完成：成功恢复 " + payload.rows.size() + " 条，重新分配 ID " + payload.reassignedIdCount + " 条");
         response.sendRedirect(request.getContextPath() + "/list");
     }
 

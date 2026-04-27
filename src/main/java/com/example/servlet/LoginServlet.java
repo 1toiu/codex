@@ -4,6 +4,7 @@ import com.example.auth.AuthUtil;
 import com.example.entity.AuthAccount;
 import com.example.mapper.AuthAccountMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -48,6 +49,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         session.setAttribute(AuthUtil.LOGIN_USER, username);
         session.setAttribute(AuthUtil.ROLE, role);
+        OperationLogUtil.log(username, "LOGIN", "登录系统，角色=" + role);
         response.sendRedirect(request.getContextPath() + "/list");
     }
 

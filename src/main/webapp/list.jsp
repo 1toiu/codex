@@ -16,6 +16,9 @@
                 <span class="welcome">当前登录：${sessionScope.loginUser}</span>
             </div>
             <div class="actions">
+                <c:if test="${sessionScope.role == 'admin'}">
+                    <a class="btn secondary compact" href="${pageContext.request.contextPath}/logs">操作日志</a>
+                </c:if>
                 <a class="btn secondary compact" href="${pageContext.request.contextPath}/change-password">修改密码</a>
                 <a class="btn secondary compact" href="${pageContext.request.contextPath}/logout">退出登录</a>
             </div>
@@ -24,7 +27,7 @@
         <section class="hero">
             <span class="eyebrow">USER DIRECTORY</span>
             <h1>用户管理系统</h1>
-            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只拥有查看权限。</p>
+            <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只有查看权限。</p>
         </section>
 
         <c:if test="${not empty sessionScope.flash}">
@@ -56,7 +59,15 @@
 
             <div class="table-wrap">
                 <table class="user-table">
-                    <thead><tr><th>ID</th><th>姓名</th><th>年龄</th><th>邮箱</th><th>操作</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>年龄</th>
+                            <th>邮箱</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <c:forEach var="user" items="${userList}">
                             <tr>
@@ -72,14 +83,18 @@
                                                 <a class="link-action danger" href="${pageContext.request.contextPath}/delete?id=${user.id}" onclick="return confirm('确定要删除这个用户吗？')">删除</a>
                                             </div>
                                         </c:when>
-                                        <c:otherwise><span class="readonly-pill">仅可查看</span></c:otherwise>
+                                        <c:otherwise>
+                                            <span class="readonly-pill">仅可查看</span>
+                                        </c:otherwise>
                                     </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                <c:if test="${empty userList}"><div class="empty">暂无匹配的用户，换个关键词试试。</div></c:if>
+                <c:if test="${empty userList}">
+                    <div class="empty">暂无匹配的用户，换个关键词试试。</div>
+                </c:if>
             </div>
 
             <c:if test="${totalPages > 1}">

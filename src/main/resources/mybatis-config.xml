@@ -21,6 +21,7 @@
 
   <mappers>
     <mapper class="com.example.mapper.AuthAccountMapper"/>
+    <mapper class="com.example.mapper.OperationLogMapper"/>
     <mapper class="com.example.mapper.UserMapper"/>
   </mappers>
 </configuration>

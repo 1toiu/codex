@@ -3,6 +3,7 @@ package com.example.servlet;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -50,6 +51,7 @@ public class BackupServlet extends HttpServlet {
                .append("\r\n");
         }
 
+        OperationLogUtil.log(request, "BACKUP_USERS", "备份用户数据，共 " + userList.size() + " 条");
         response.getWriter().write(csv.toString());
         response.getWriter().flush();
     }

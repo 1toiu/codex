@@ -17,6 +17,14 @@ CREATE TABLE IF NOT EXISTS t_account (
   password VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS t_operation_log (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL,
+  action VARCHAR(50) NOT NULL,
+  detail VARCHAR(255) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT IGNORE INTO t_account (username, password) VALUES
   ('admin', 'admin123'),
   ('user', 'user123');

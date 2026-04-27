@@ -3,6 +3,7 @@ package com.example.servlet;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
+import com.example.util.OperationLogUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -33,6 +34,7 @@ public class AddServlet extends HttpServlet {
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             mapper.add(user);
         }
+        OperationLogUtil.log(request, "ADD_USER", "新增用户：" + name);
         response.sendRedirect("list");
     }
 
