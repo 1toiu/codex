@@ -30,6 +30,29 @@
             <p>集中查看和搜索用户资料。管理员可以新增、编辑、删除、导入、备份和恢复用户；普通用户只有查看权限。</p>
         </section>
 
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span class="stat-label">用户总数</span>
+                <strong class="stat-value">${totalUserCount}</strong>
+                <span class="stat-meta">系统中的全部用户资料</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">当前结果</span>
+                <strong class="stat-value">${totalCount}</strong>
+                <span class="stat-meta">本次查询命中的记录数</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">系统账号</span>
+                <strong class="stat-value">${accountCount}</strong>
+                <span class="stat-meta">可登录后台的账号数量</span>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">操作日志</span>
+                <strong class="stat-value">${logCount}</strong>
+                <span class="stat-meta">累计记录的关键操作</span>
+            </article>
+        </section>
+
         <c:if test="${not empty sessionScope.flash}">
             <div class="alert">${sessionScope.flash}</div>
             <c:remove var="flash" scope="session" />
@@ -101,7 +124,7 @@
                 <div class="pagination">
                     <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=1&name=${param.name}">首页</a>
                     <a class="page-link ${currentPage == 1 ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage - 1}&name=${param.name}">上一页</a>
-                    <span class="page-status">第 ${currentPage} / ${totalPages} 页，共 ${totalCount} 条</span>
+                    <span class="page-status">第 ${currentPage} / ${totalPages} 页，每页 ${pageSize} 条，共 ${totalCount} 条</span>
                     <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${currentPage + 1}&name=${param.name}">下一页</a>
                     <a class="page-link ${currentPage == totalPages ? 'disabled' : ''}" href="${pageContext.request.contextPath}/list?page=${totalPages}&name=${param.name}">末页</a>
                 </div>

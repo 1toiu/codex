@@ -1,5 +1,7 @@
 package com.example.servlet;
 
+import com.example.mapper.AuthAccountMapper;
+import com.example.mapper.OperationLogMapper;
 import com.example.entity.User;
 import com.example.mapper.UserMapper;
 import com.example.util.MyBatisUtil;
@@ -25,11 +27,14 @@ public class UserListServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try (SqlSession sqlSession = MyBatisUtil.getSqlSession()) {
+            AuthAccountMapper accountMapper = sqlSession.getMapper(AuthAccountMapper.class);
+            OperationLogMapper logMapper = sqlSession.getMapper(OperationLogMapper.class);
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
             String name = request.getParameter("name");
             String keyword = name == null ? "" : name.trim();
             boolean hasKeyword = !keyword.isEmpty();
             int totalCount = hasKeyword ? mapper.countByName(keyword) : mapper.countAll();
+            int totalUserCount = mapper.countAll();
             int totalPages = Math.max(1, (int) Math.ceil(totalCount / (double) PAGE_SIZE));
             int currentPage = resolvePage(request.getParameter("page"), totalPages);
             int offset = (currentPage - 1) * PAGE_SIZE;
@@ -40,6 +45,10 @@ public class UserListServlet extends HttpServlet {
             request.setAttribute("currentPage", currentPage);
             request.setAttribute("totalPages", totalPages);
             request.setAttribute("totalCount", totalCount);
+            request.setAttribute("totalUserCount", totalUserCount);
+            request.setAttribute("accountCount", accountMapper.countAll());
+            request.setAttribute("logCount", logMapper.countAll());
+            request.setAttribute("pageSize", PAGE_SIZE);
             request.getRequestDispatcher("/list.jsp").forward((ServletRequest) request, (ServletResponse) response);
         }
     }
