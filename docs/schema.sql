@@ -10,3 +10,13 @@ CREATE TABLE IF NOT EXISTS t_user (
   age INT NOT NULL,
   email VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS t_account (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(100) NOT NULL
+);
+
+INSERT IGNORE INTO t_account (username, password) VALUES
+  ('admin', 'admin123'),
+  ('user', 'user123');

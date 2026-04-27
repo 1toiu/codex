@@ -1,6 +1,9 @@
 package com.example.servlet;
 
 import com.example.auth.AuthUtil;
+import com.example.entity.AuthAccount;
+import com.example.mapper.AuthAccountMapper;
+import com.example.util.MyBatisUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.ibatis.session.SqlSession;
 
 @WebServlet(value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -17,14 +21,18 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (AuthUtil.isLoggedIn(request)) {
+            response.sendRedirect(request.getContextPath() + "/list");
+            return;
+        }
         request.getRequestDispatcher("/login.jsp").forward((ServletRequest) request, (ServletResponse) response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = trim(request.getParameter("username"));
+        String password = trim(request.getParameter("password"));
         String role = resolveRole(username, password);
 
         if (role == null) {
@@ -44,12 +52,21 @@ public class LoginServlet extends HttpServlet {
     }
 
     private String resolveRole(String username, String password) {
-        if ("admin".equals(username) && "admin123".equals(password)) {
-            return AuthUtil.ADMIN;
+        if (username.isEmpty() || password.isEmpty()) {
+            return null;
         }
-        if ("user".equals(username) && "user123".equals(password)) {
-            return AuthUtil.USER;
+
+        try (SqlSession sqlSession = MyBatisUtil.getSqlSession()) {
+            AuthAccountMapper mapper = sqlSession.getMapper(AuthAccountMapper.class);
+            AuthAccount account = mapper.findByUsernameAndPassword(username, password);
+            if (account == null) {
+                return null;
+            }
+            return AuthUtil.ADMIN.equals(username) ? AuthUtil.ADMIN : AuthUtil.USER;
         }
-        return null;
+    }
+
+    private String trim(String value) {
+        return value == null ? "" : value.trim();
     }
 }

@@ -20,6 +20,7 @@
   </environments>
 
   <mappers>
+    <mapper class="com.example.mapper.AuthAccountMapper"/>
     <mapper class="com.example.mapper.UserMapper"/>
   </mappers>
 </configuration>

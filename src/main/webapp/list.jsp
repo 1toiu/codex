@@ -15,7 +15,10 @@
                 <span class="badge ${sessionScope.role == 'admin' ? 'admin' : 'user'}">${sessionScope.role == 'admin' ? '管理员' : '普通用户'}</span>
                 <span class="welcome">当前登录：${sessionScope.loginUser}</span>
             </div>
-            <a class="btn secondary compact" href="${pageContext.request.contextPath}/logout">退出登录</a>
+            <div class="actions">
+                <a class="btn secondary compact" href="${pageContext.request.contextPath}/change-password">修改密码</a>
+                <a class="btn secondary compact" href="${pageContext.request.contextPath}/logout">退出登录</a>
+            </div>
         </div>
 
         <section class="hero">
