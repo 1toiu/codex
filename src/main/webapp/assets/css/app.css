@@ -70,6 +70,10 @@ body::before {
 .link-action { border-radius: 999px; padding: 7px 12px; color: var(--brand-deep); background: rgba(15,118,110,0.09); font-weight: 800; text-decoration: none; }
 .link-action.danger { color: var(--danger); background: rgba(220,38,38,0.09); }
 .empty { padding: 38px 20px; color: var(--muted); text-align: center; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px; padding: 18px 22px 22px; border-top: 1px solid var(--line); }
+.page-link { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; border: 1px solid rgba(15,118,110,0.18); border-radius: 12px; padding: 0 14px; color: var(--brand-deep); background: rgba(255,255,255,0.72); font-weight: 700; text-decoration: none; }
+.page-link.disabled { pointer-events: none; opacity: 0.45; }
+.page-status { color: var(--muted); font-weight: 700; }
 .form-actions { display: flex; gap: 12px; margin-top: 8px; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.52); backdrop-filter: blur(14px); }
 .badge.admin { color: #7c2d12; background: rgba(245,158,11,0.2); }
@@ -86,9 +90,10 @@ body::before {
 
 @media (max-width: 680px) {
     .shell { width: min(100% - 22px, 1120px); padding-top: 26px; }
-    .toolbar, .search-form, .form-actions, .topbar, .import-form { display: grid; grid-template-columns: 1fr; }
+    .toolbar, .search-form, .form-actions, .topbar, .import-form, .pagination { display: grid; grid-template-columns: 1fr; }
     .form-card { padding: 22px; }
     .user-table th, .user-table td { padding: 14px 16px; }
     .topbar { align-items: stretch; border-radius: 22px; }
     .welcome { display: block; margin: 8px 0 0; }
+    .page-status { text-align: center; }
 }
